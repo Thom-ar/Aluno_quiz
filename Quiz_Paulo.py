@@ -104,4 +104,63 @@ st.markdown("""
             margin-bottom:30px;
         }
         .question-box {
-            background-color:#e6
+            background-color:#e6ffe6;
+            color:#111;
+            padding:20px;
+            border-radius:15px;
+            box-shadow:0 0 8px #cdeccd;
+            margin-bottom:20px;
+        }
+        .stRadio > label {
+            color:#222 !important;
+        }
+    </style>
+""", unsafe_allow_html=True)
+
+# 🧭 Cabeçalho
+st.markdown("<div class='title'>🍎 Quiz de Conservação e Nutrição</div>", unsafe_allow_html=True)
+st.markdown("<div class='subtitle'>Responda as perguntas e veja seu desempenho!</div>", unsafe_allow_html=True)
+
+# 🧩 Perguntas
+if not st.session_state.finished:
+    i = st.session_state.question_index
+    q = questions[i]
+
+    st.markdown(f"<div class='question-box'><b>Pergunta {i+1}/{len(questions)}:</b><br>{q['question']}</div>", unsafe_allow_html=True)
+    resposta = st.radio("Escolha sua resposta:", q["options"], key=i)
+
+    if st.button("Confirmar resposta", use_container_width=True):
+        correct = resposta == q["correct"]
+        next_question(correct)
+        st.rerun()
+
+else:
+    # 🏁 Resultados
+    total = len(questions)
+    score = st.session_state.score
+    percent = (score / total) * 100
+
+    st.markdown("## 🎉 Resultado Final")
+    st.success(f"Pontuação: **{score}/{total} ({percent:.1f}%)**")
+
+    # Níveis
+    if percent == 100:
+        st.balloons()
+        st.success("🏆 Expert — Excelente! Você dominou o conteúdo!")
+    elif percent >= 80:
+        st.success("🥇 Avançado — Parabéns! Você tem ótimo conhecimento!")
+    elif percent >= 60:
+        st.info("🥈 Intermediário — Bom desempenho! Continue praticando!")
+    else:
+        st.warning("🥉 Iniciante — Estude um pouco mais e tente novamente!")
+
+    # ⏱ Tempos
+    st.markdown("### ⏱ Tempos de resposta:")
+    for i, t in enumerate(st.session_state.times, start=1):
+        st.write(f"Pergunta {i}: {t:.2f} segundos")
+
+    # 🔄 Reiniciar
+    if st.button("🔄 Reiniciar quiz", use_container_width=True):
+        for key in list(st.session_state.keys()):
+            del st.session_state[key]
+        st.rerun()
