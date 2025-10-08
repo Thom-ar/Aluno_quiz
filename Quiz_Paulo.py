@@ -93,7 +93,7 @@ st.markdown("""
     <style>
         .title {text-align:center; color:#2E8B57; font-size:30px; font-weight:bold;}
         .subtitle {text-align:center; color:gray; margin-bottom:30px;}
-        .timer {text-align:center; color:#FF6347; font-weight:bold;}
+        .timer {text-align:center; color:#FFFFF; font-weight:bold;}
         .question-box {background-color:#F7FFF7; padding:20px; border-radius:15px; box-shadow:0 0 10px #DDD;}
     </style>
 """, unsafe_allow_html=True)
